@@ -1,6 +1,4 @@
 ---
-## INSTALL
-
 # postgresql_backup binaries path
 postgresql_backup_client_bin: /usr/local/bin
 
@@ -8,11 +6,11 @@ postgresql_backup_client_bin: /usr/local/bin
 postgresql_backup_client_release: ""
 
 # Runtime user and group for the postgresql_backup crontab/folder
-postgresql_backup_user: postgresql
-postgresql_backup_group: postgresql
+postgresql_backup_user: backuper
+postgresql_backup_group: backuper
 
 # Path to the file containing the ENV variables for the postgresql_backup
-postgresql_backup_envdir: /usr/local/etc/postgresql_backup/.env
+postgresql_backup_envdir: /usr/local/etc/postgresql_backup/
 
 
 ## ENV
@@ -21,15 +19,15 @@ postgresql_backup_env: "production"
 postgresql_backup_host: ""
 postgresql_backup_port: "5432"
 postgresql_backup_db: "docker"
-postgresql_backup_db_user: "postgres"
-postgresql_backup_dir: "/var/lib/postgresql/backups/"
-
-postgresql_backup_integram_webhook_uri: "your-uri"
+postgresql_backup_db_user: "docker"
+postgresql_backup_db_user_password: "docker"
+postgresql_backup_dir: "/home/backuper/postgresql_backups/"
+postgresql_backup_integram_webhook_uri: "https://integram.org/webhook/cdgdw68sIpR"
 postgresql_backup_sentry_dsn: "your-dsn"
 
 postgresql_backup_rotated_time_daily: "7"
 postgresql_backup_rotated_time_weekly: "4"
-postgresql_rotated_time_monthly: "12"
+postgresql_backup_rotated_time_monthly: "12"
 
 
 ######## EXTRA
