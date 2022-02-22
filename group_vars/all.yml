@@ -16,7 +16,7 @@ postgresql_backup_envdir: /usr/local/etc/postgresql_backup/
 ## ENV
 
 postgresql_backup_env: "production"
-postgresql_backup_host: ""
+postgresql_backup_host: "127.0.0.1"
 postgresql_backup_port: "5432"
 postgresql_backup_db: "docker"
 postgresql_backup_db_user: "docker"
