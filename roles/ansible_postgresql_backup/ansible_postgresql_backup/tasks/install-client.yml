@@ -1,0 +1,70 @@
+---
+
+- name: Compose the postgresql_backup client download base url
+  set_fact:
+    _postgresql_backup_client_download_base_url: "https://github.com/Rishats/postgresql-backup/releases/download/latest/postgresql_backup_linux_{{ go_arch }}"
+
+- name: Compose the postgresql_backup client download url with latest release
+  set_fact:
+    _postgresql_backup_client_download_url: "{{ _postgresql_backup_client_download_base_url }}"
+  when: postgresql_backup_client_release | length == 0
+
+- name: "Compose the postgresql_backup client download url with release {{ postgresql_backup_client_release }}"
+  set_fact:
+    _postgresql_backup_client_download_url: "https://github.com/Rishats/postgresql_backup/releases/download/{{ postgresql_backup_client_release }}/postgresql_backup_linux_{{ go_arch }}"
+  when: postgresql_backup_client_release | length > 0
+
+- name: Download the postgresql_backup client
+  get_url:
+    url: "{{ _postgresql_backup_client_download_url }}"
+    dest: "{{ postgresql_backup_client_bin }}/postgresql_backup"
+    owner: "root"
+    group: "root"
+    mode: 0755
+  register: _download_client
+  until: _download_client is succeeded
+  retries: 5
+  delay: 2
+
+- name: Create postgresql_backup group
+  group:
+    name: "{{ postgresql_backup_group }}"
+    state: present
+  when: postgresql_backup_group | length > 0
+
+- name: Create postgresql_backup user
+  user:
+    name: "{{ postgresql_backup_user }}"
+    group: "{{ postgresql_backup_group }}"
+  when: 
+    - postgresql_backup_user | length > 0
+    - postgresql_backup_group | length > 0
+
+- name: Make sure destination dir for .env exists
+  file:
+    path: "{{ postgresql_backup_envdir }}"
+    state: directory
+
+- name: Make sure destination dir for backups exists
+  file:
+    path: "{{ postgresql_backup_dir }}"
+    state: directory
+    owner: "{{ postgresql_backup_user }}"
+    group: "{{ postgresql_backup_group }}"
+
+- name: Generate the postgresql_backup server envfile
+  template:
+    src: postgresql_backup.env.j2
+    dest: "{{ postgresql_backup_envdir }}/.env"
+    owner: "root"
+    group: "{{ postgresql_backup_group }}"
+    mode: 0660
+
+- name: Ensure a cronjob that runs backups at 2:00 AM created"
+  ansible.builtin.cron:
+    name: "run backup app"
+    minute: "0"
+    hour: "2"
+    job: "{{ postgresql_backup_client_bin }}/postgresql_backup > /dev/null 2>&1"
+    user: "{{ postgresql_backup_user }}"
+

@@ -1,0 +1,36 @@
+---
+## INSTALL
+
+# postgresql_backup binaries path
+postgresql_backup_client_bin: /usr/local/bin
+
+# postgresql_backup release to install. default latest
+postgresql_backup_client_release: ""
+
+# Runtime user and group for the postgresql_backup crontab/folder
+postgresql_backup_user: postgresql
+postgresql_backup_group: postgresql
+
+# Path to the file containing the ENV variables for the postgresql_backup
+postgresql_backup_envdir: /usr/local/etc/postgresql_backup/.env
+
+
+## ENV
+
+postgresql_backup_env: "production"
+postgresql_backup_host: ""
+postgresql_backup_port: "5432"
+postgresql_backup_db: "docker"
+postgresql_backup_db_user: "postgres"
+postgresql_backup_dir: "/var/lib/postgresql/backups/"
+
+postgresql_backup_integram_webhook_uri: "your-uri"
+postgresql_backup_sentry_dsn: "your-dsn"
+
+postgresql_backup_rotated_time_daily: "7"
+postgresql_backup_rotated_time_weekly: "4"
+postgresql_rotated_time_monthly: "12"
+
+
+######## EXTRA
+postgresql_backup_server_env_extra: ""
